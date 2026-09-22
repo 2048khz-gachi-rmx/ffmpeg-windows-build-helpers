@@ -2404,6 +2404,7 @@ build_ffmpeg() {
 
   cd $output_dir
     apply_patch file://$patch_dir/frei0r_load-shared-libraries-dynamically.diff
+	apply_patch file://$patch_dir/timeapi_fix.patch -p1
     if [ "$bits_target" = "32" ]; then
       local arch=x86
     else
