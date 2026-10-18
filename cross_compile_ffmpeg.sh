@@ -1859,10 +1859,13 @@ build_libaom() {
   else
     local config_options="-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/x86_64-mingw-gcc.cmake -DAOM_TARGET_CPU=x86_64"
   fi
-  config_options+=" -DENABLE_TESTS=0 -DENABLE_EXAMPLES=0" # don't build aom's test/example programs
+  # NOTE: config_options must stay a single quoted arg -- do_cmake_from_build_dir
+  # only reads $2, so an unquoted expansion silently dropped every flag but the
+  # first (aom never actually got -DAOM_TARGET_CPU before this).
+  config_options+=" -DENABLE_TESTS=0 -DENABLE_EXAMPLES=0 -DENABLE_TESTDATA=0 -DENABLE_TOOLS=0 -DENABLE_DOCS=0" # don't build aom's test/example/tool programs
   mkdir -p aom_git/aom_build
   cd aom_git/aom_build
-    do_cmake_from_build_dir .. $config_options
+    do_cmake_from_build_dir .. "$config_options"
     do_make_and_make_install
   cd ../..
 }
